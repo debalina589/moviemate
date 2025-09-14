@@ -14,20 +14,20 @@ const App = () => {
 
   const isAdminRoutes = useLocation().pathname.startsWith('/admin')
   return (
-    <>
-    <Toaster/>
-        {!isAdminRoutes && <Navbar/>}
-          <Routes>
-            <Route path='/' element={<Home/>}/>
-            <Route path='/movies' element={<Movies/>}/>
-            <Route path='/movies/:id' element={<MovieDetails/>}/>
-            <Route path='/movies/:id/:date' element= {<SeatLayout/>}/>
-            <Route path='/my-bookings' element= {<MyBookings/>}/>
-            <Route path='/favorite' element= {<Favorite/>}/>
+    <div className='w-screen h-screen bg-gradient-to-b from-black via-blue-900 to-black overflow-x-hidden'>
+      <Toaster />
+      {!isAdminRoutes && <Navbar />}
+      <Routes>
+        <Route path='/' element={<Home />} />
+        <Route path='/movies' element={<Movies />} />
+        <Route path='/movies/:id' element={<MovieDetails />} />
+        <Route path='/movies/:id/:date' element={<SeatLayout />} />
+        <Route path='/my-bookings' element={<MyBookings />} />
+        <Route path='/favorite' element={<Favorite />} />
 
-          </Routes>
-           {!isAdminRoutes && <Footer/>}
-    </>
+      </Routes>
+      {!isAdminRoutes && <Footer />}
+    </div>
   )
 }
 

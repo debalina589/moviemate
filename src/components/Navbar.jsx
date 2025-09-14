@@ -23,21 +23,19 @@ const Navbar = () => {
         <Link onClick={()=> {scrollTo(0,0); setIsOpen(false)}} to='/favorite'>Favorites</Link>
       </div>
         
-        <div className='flex gap-2 items-center'>
+        <div className='flex gap-8 items-center'>
           <SearchIcon className='max-md:hidden w-6 h-6 cursor-pointer'/>
           {
             !user ?(
-                <button onClick={openSignIn} className='px-4 py-1 sm:px-7 sm:py-2 bg-rose-400 hover:bg-rose-300 transition rounded-full font-medium cursor-pointer'>Log in</button>
+                <button onClick={openSignIn} className='px-4 py-1 sm:px-7 sm:py-2 bg-blue-500 hover:bg-blue-400 transition rounded-full font-medium cursor-pointer'>Log in</button>
             ) : (
               <UserButton>
                 <UserButton.MenuItems>
-                  <UserButton.Action label="My Bookings" labelIcon= {<TicketPlus width={15} onClick={()=> navigate('/my-bookings')}/>}/>
+                  <UserButton.Action label="My Bookings" labelIcon= {<TicketPlus width={10} onClick={()=> navigate('/my-bookings')}/>}/>
                 </UserButton.MenuItems>
               </UserButton>   
             )
           }
-          
-
         </div>
 
        <MenuIcon className='max-md:ml-4 md:hidden w-8 h-8 cursor-pointer' onClick={()=> setIsOpen(!isOpen)}/>   

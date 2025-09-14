@@ -59,7 +59,7 @@ const MovieDetails = () => {
             </button>
             <a
               href="#dataSelect"
-              className="px-10 py-3 text-sm bg-red-500 hover:bg-red-400 transition rounded-md font-medium cursor-pointer active:scale-95 gap-6"
+              className="px-10 py-3 text-sm bg-blue-500 hover:bg-blue-400 transition rounded-md font-medium cursor-pointer active:scale-95 gap-6"
             >
               {" "}
               Buy Tickets{" "}
@@ -98,7 +98,7 @@ const MovieDetails = () => {
             navigate("/movies");
             scrollTo(0, 0);
           }}
-          className="px-10 py-3 text-sm bg-red-500 hover:bg-red-400 transition rounded-md font-medium cursor-pointer"
+          className="px-10 py-3 text-sm bg-blue-500 hover:bg-blue-400 transition rounded-md font-medium cursor-pointer"
         >
           Show More
         </button>

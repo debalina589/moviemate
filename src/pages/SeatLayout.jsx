@@ -58,7 +58,7 @@ const SeatLayout = () => {
               key={seatId}
               onClick={() => handleSeatClick(seatId)}
               className={`h-8 w-8 rounded border border-primary/60 cursor-pointer ${
-                selectedSeats.includes(seatId) && "bg-rose-500 text-white"
+                selectedSeats.includes(seatId) && "bg-blue-500 text-white"
               }`}
             >
               {seatId}
@@ -84,7 +84,7 @@ const SeatLayout = () => {
               onClick={() => setSelectedTime(item)}
               className={`flex items-center gap-2 px-6 py-2 w-max rounded-r-md cursor-pointer transition ${
                 selectedTime?.time === item.time
-                  ? "bg-rose-400 text-white"
+                  ? "bg-blue-400 text-white"
                   : "hover:bg-primary/20"
               }`}
             >
@@ -113,7 +113,7 @@ const SeatLayout = () => {
         </div>
         <button
           onClick={() => navigate("/my-bookings")}
-          className="flex items-center gap-1 mt-20 px-10 py-3 text-sm bg-rose-500 hover:bg-rose-400 transition rounded-full font-medium cursor-pointer active:scale-95"
+          className="flex items-center gap-1 mt-20 px-10 py-3 text-sm bg-blue-500 hover:bg-blue-400 transition rounded-full font-medium cursor-pointer active:scale-95"
         >
           Proceed to Checkout
           <ArrowRightIcon strokeWidth={3} className="w-4 h-4" />
