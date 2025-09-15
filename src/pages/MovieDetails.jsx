@@ -87,7 +87,7 @@ const MovieDetails = () => {
       </div>
       <DateSelect dateTime={show.dateTime} id={id} />
       <p className="text-lg font-medium mt-20 mb-8">You May Also Like</p>
-      <div className="flex flex-wrap max-sm:justify-centergap-8">
+      <div className="flex flex-wrap max-sm:justify-center gap-8">
         {dummyShowsData.slice(0, 4).map((movie, index) => (
           <MovieCard key={index} movie={movie} />
         ))}

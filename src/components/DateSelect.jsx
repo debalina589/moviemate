@@ -26,7 +26,7 @@ const navigate = useNavigate();
             <p className='text-lg font-semibold'>Choose Date</p>
             <div className='flex items-center gap-6 text-sm mt-5'>
                 <ChevronLeftIcon width={28}/>
-                <span>{Object.keys(dateTime).map((date)=>(
+                <span className='flex items-center gap-6 text-sm'>{Object.keys(dateTime).map((date)=>(
                     <button onClick={()=> setSelected(date)} key={date} className={`flex flex-col items-center justify-center h-14 w-14 aspect-square rounded cursor-pointer ${selected === date ? "bg-blue-500 text-white" : "border border-red/70"}`}>
                       <span>{new Date(date).getDate()}</span>  
                       <span>{new Date(date).toLocaleDateString("en-US",{month: "short"})}</span>  
