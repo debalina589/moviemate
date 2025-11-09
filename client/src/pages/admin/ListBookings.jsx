@@ -1,24 +1,41 @@
 import React, { useEffect, useState } from 'react'
-import { dummyBookingData } from '../../assets/assets.js';
 import Loading from '../../components/Loading.jsx';
 import Title from '../../components/admin/Title.jsx';
 import { dateFormat } from '../../library/dateFormat.js';
+import { useAppContext } from '../../context/AppContext.jsx';
+import toast from 'react-hot-toast';
 
 const ListBookings = () => {
+  const { axios, getToken, user } = useAppContext();
+
   const currency = import.meta.env.VITE_CURRENCY
   const [bookings, setBookings] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
-  const getAllBookings = async ()=> {
-    setBookings(dummyBookingData)
-    setIsLoading(false);
-  }; 
-  useEffect(()=>{
-    getAllBookings();
-  },[]);
+  const getAllBookings = async () => {
+    try {
+      const { data } = await axios.get('/api/admin/all-bookings', {
+        headers: {
+          Authorization: `Bearer ${await getToken()}`
+        }
+      });
+      if (data.success) {
+        setBookings(data.bookings);
+      }
+    } catch (error) {
+      toast.error("Error fetching bookings list", error);
+    } finally {
+      setIsLoading(false);
+    }
+  };
+  useEffect(() => {
+    if (user) {
+      getAllBookings();
+    }
+  }, []);
 
-  return !isLoading ?(
+  return !isLoading ? (
     <>
-      <Title text1="List " text2=" Bookings"/>
+      <Title text1="List " text2=" Bookings" />
       <div className='max-w-4xl mt-6 overflow-x-auto'>
         <table className='w-full border-collapse rounded-md overflow-hidden text-nowrap'>
           <thead>
@@ -31,21 +48,21 @@ const ListBookings = () => {
             </tr>
           </thead>
           <tbody className='text-sm font-light'>
-            {bookings.map((item, index)=>(
+            {bookings.map((item, index) => (
               <tr key={index} className='border-b border-blue-500/10 bg-blue-400/5 even:bg-blue-400/25'>
                 <td className='p-2 min-w-45 pl-5'>{item.user.name} </td>
                 <td className='p-2'>{item.show.movie.title} </td>
                 <td className='p-2'>{dateFormat(item.show.showDateTime)} </td>
-                <td className='p-2'>{Object.keys(item.bookedSeats).map(seat=> item.bookedSeats[seat]).join(", ")} </td>
+                <td className='p-2'>{Object.keys(item.bookedSeats).map(seat => item.bookedSeats[seat]).join(", ")} </td>
                 <td className='p-2'>{currency}{item.amount} </td>
               </tr>
             ))}
 
           </tbody>
         </table>
-        </div>
+      </div>
     </>
-  ) : <Loading/>
+  ) : <Loading />
 }
 
-export default ListBookings
+export default ListBookings;

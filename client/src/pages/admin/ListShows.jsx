@@ -3,60 +3,78 @@ import { dummyShowsData } from '../../assets/assets.js';
 import Loading from '../../components/Loading.jsx';
 import Title from '../../components/admin/Title.jsx';
 import { dateFormat } from '../../library/dateFormat.js';
+import { useAppContext } from '../../context/AppContext.jsx';
+import toast from 'react-hot-toast';
 
 const ListShows = () => {
+  const { axios, getToken, user } = useAppContext();
+
   const currency = import.meta.env.VITE_CURRENCY
   const [shows, setShows] = useState([]);
   const [loading, setLoading] = useState(true);
 
-const getAllShows = async() => {
-  try{
-    setShows([{
-      movie: dummyShowsData[0],
-      showDateTime: "2025-06-30T02:30:00.000Z",
-      showPrice:59,
-      occupiedSeats:{
-        A1:"user_1",
-        B1:"user_2",
-        C1:"user_3",
+  const getAllShows = async () => {
+    try {
+
+      const { data } = await axios.get('/api/admin/all-shows', {
+        headers: {
+          Authorization: `Bearer ${await getToken()}`
+        }
+      });
+
+      if (data.success) {
+        setShows(data.shows);
       }
-    }]);
-    setLoading(false);
-  }catch(error){
-    console.error(error); 
-  } 
-}
-useEffect(()=>{
-  getAllShows();
-},[]);
+      // setShows([{
+      //   movie: dummyShowsData[0],
+      //   showDateTime: "2025-06-30T02:30:00.000Z",
+      //   showPrice:59,
+      //   occupiedSeats:{
+      //     A1:"user_1",
+      //     B1:"user_2",
+      //     C1:"user_3",
+      //   }
+      // }]);
+      // setLoading(false);
+    } catch (error) {
+      toast.error("Error fetching shows list", error);
+    } finally {
+      setLoading(false);
+    }
+  }
+  useEffect(() => {
+    if (user) {
+      getAllShows();
+    }
+  }, []);
   return !loading ? (
     <>
-    <Title  text1="List " text2=" Shows"/>
-    <div className='max-w-4xl mt-6 overflow-x-auto' ><table className='w-full border-collapse rounded-md overflow-hidden text-nowrap'>
-      <thead>
-        <tr className='bg-blue-600/20 text-left text-white'>
-        <th className='p-2 font-medium pl-5'>Movie Name</th>
-        <th className='p-2 font-medium '>Show Time</th>
-        <th className='p-2 font-medium '>Total Bookings</th>
-        <th className='p-2 font-medium '>Earnings</th>
-        </tr>
-      </thead>
-      <tbody className='text-sm font-light'>
-        {shows.map((show, index)=>(
-          <tr key={index} className='border-b border-blue-500/10 bg-blue-400/5 even:bg-blue-400/25'>
-            <td className='p-2 min-w-45 pl-5'>{show.movie.title}</td>
-            <td className='p-2'>{dateFormat(show.showDateTime)}</td>
-            <td className='p-2'>{Object.keys(show.occupiedSeats).length}</td>
-            <td className='p-2'>{currency}{Object.keys(show.occupiedSeats).length * show.showPrice}</td>
+      <Title text1="List " text2=" Shows" />
+      <div className='max-w-4xl mt-6 overflow-x-auto' ><table className='w-full border-collapse rounded-md overflow-hidden text-nowrap'>
+        <thead>
+          <tr className='bg-blue-600/20 text-left text-white'>
+            <th className='p-2 font-medium pl-5'>Movie Name</th>
+            <th className='p-2 font-medium '>Show Time</th>
+            <th className='p-2 font-medium '>Total Bookings</th>
+            <th className='p-2 font-medium '>Earnings</th>
           </tr>
-        ))}
+        </thead>
+        <tbody className='text-sm font-light'>
+          {shows.map((show, index) => (
+            <tr key={index} className='border-b border-blue-500/10 bg-blue-400/5 even:bg-blue-400/25'>
+              <td className='p-2 min-w-45 pl-5'>{show.movie.title}</td>
+              <td className='p-2'>{dateFormat(show.showDateTime)}</td>
+              <td className='p-2'>{Object.keys(show.occupiedSeats).length}</td>
+              <td className='p-2'>{currency}{Object.keys(show.occupiedSeats).length * show.showPrice}</td>
+            </tr>
+          ))}
 
-      </tbody>
+        </tbody>
       </table>
       </div>
 
     </>
-  ) : <Loading/>
+  ) : <Loading />
 }
 
 export default ListShows

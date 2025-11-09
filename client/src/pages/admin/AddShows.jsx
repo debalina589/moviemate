@@ -101,7 +101,7 @@ const AddShows = () => {
                 <img src={image_base_url + movie.poster_path} alt="" className='w-full object-cover brightness-90' />
                 <div className='text-sm flex items-center justify-between p-2 bg-black/100 w-full absolute bottom-0 left-0'>
                   <p className='flex items-center gap-1 text-gray-300'>
-                    <StarIcon className='w-4 h-4 text-rose-500 fill-rose-500' />
+                    <StarIcon className='w-4 h-4 text-blue-500 fill-blue-500' />
                     {movie.vote_average.toFixed(1)}
                   </p>
                   <p className='text-gray-300'>{kConverter(movie.vote_count)} Votes </p>
@@ -133,7 +133,7 @@ const AddShows = () => {
             value={dateTimeInput}
             onChange={(e) => setDateTimeInput(e.target.value)}
             className='outline-none rounded-md cursor-pointer' />
-          <button onClick={handleDateTimeAdd} className='bg-blue-500 text-white px-3 py-2 text-sm rounded-lg hover:bg-red-500/10 cursor-pointer'>Add Time</button>
+          <button onClick={handleDateTimeAdd} className='bg-blue-500 text-white px-3 py-2 text-sm rounded-lg hover:bg-blue-500/10 cursor-pointer'>Add Time</button>
         </div>
       </div>
       {Object.keys(dateTimeSelection).length > 0 && (
@@ -147,7 +147,7 @@ const AddShows = () => {
                   {times.map((time) => (
                     <div key={time} className='border border-blue-300 px-2 py-1 flex items-center rounded'>
                       <span>{time}</span>
-                      <DeleteIcon onClick={() => handleRemoveTime(date, time)} width={15} className='ml-2 text-blue-500 hover:blue-red-700 cursor-pointer' /></div>
+                      <DeleteIcon onClick={() => handleRemoveTime(date, time)} width={15} className='ml-2 text-blue-500 hover:blue-blue-700 cursor-pointer' /></div>
                   ))}
                 </div>
               </li>
@@ -157,7 +157,7 @@ const AddShows = () => {
 
         </div>
       )}
-      <button onClick={handleSubmit} disabled={addingShow} className='bg-blue-500 text-white px-8 py-2 mt-6 rounded hover:bg-rose-500/90 transition-all cursor-pointer'>Add Show</button>
+      <button onClick={handleSubmit} disabled={addingShow} className='bg-blue-500 text-white px-8 py-2 mt-6 rounded hover:bg-blue-500/90 transition-all cursor-pointer'>Add Show</button>
     </>
   ) : <Loading />
 }

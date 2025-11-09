@@ -25,7 +25,7 @@ const MyBookings = () => {
         </div>
         <h1 className='text-lg font-semibold mb-4'>My Bookings</h1>
         {bookings.map((item, index)=>(
-          <div key={index} className='flex flex-col md:flex-row justify-between bg-rose-500/8 border-rose/20 rounded-lg mt-4 p-2 max-w-3xl'>
+          <div key={index} className='flex flex-col md:flex-row justify-between bg-blue-500/80 border-blue/20 rounded-lg mt-4 p-2 max-w-3xl'>
             <div className='flex flex-col md:flex-row'>
               <img src={item.show.movie.poster_path} alt="" className='md:max-w-45 aspect-video h-auto object-cover object-bottom rounded'/>
              <div className='flex flex-col p-4'>
