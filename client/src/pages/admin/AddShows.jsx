@@ -101,7 +101,7 @@ const AddShows = () => {
                 <img src={image_base_url + movie.poster_path} alt="" className='w-full object-cover brightness-90' />
                 <div className='text-sm flex items-center justify-between p-2 bg-black/100 w-full absolute bottom-0 left-0'>
                   <p className='flex items-center gap-1 text-gray-300'>
-                    <StarIcon className='w-4 h-4 text-blue-500 fill-blue-500' />
+                    <StarIcon className='w-4 h-4 text-yellow-500 fill-yellow-500' />
                     {movie.vote_average.toFixed(1)}
                   </p>
                   <p className='text-gray-300'>{kConverter(movie.vote_count)} Votes </p>
@@ -127,7 +127,7 @@ const AddShows = () => {
       </div>
       <div className='mt-6'>
         <label className='block text-sm font-medium mb-2'>Select Date and Time</label>
-        <div className='inline-flex gap-5 border border-gray-600 p-1 pl-3 rounded-lg'>
+        <div className='inline-flex gap-5 border border-gray-600 p-1 pl-3 rounded-lg text-white'>
           <input
             type='datetime-local'
             value={dateTimeInput}

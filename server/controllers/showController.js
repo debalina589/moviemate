@@ -28,7 +28,7 @@ export const addShow = async (req, res) => {
             // Fetch movie details and credits from TMDB API
             const [movieDetailsResponse, movieCreditsResponse] = await Promise.all([axios.get(`https://api.themoviedb.org/3/movie/${movieId}`,{headers: {Authorization: `Bearer ${process.env.TMDB_API_KEY}`} }),
 
-             axios.get(`https://api.themoviedb.org/3/movie/${movieId}/credits`, {
+             axios.get(`https://api.themoviedb.org/3/movie/${movieId}/credits?language=en-US`, {
                 headers: {Authorization: `Bearer ${process.env.TMDB_API_KEY}`}})   
     ]);
             const movieApiData = movieDetailsResponse.data;
@@ -41,7 +41,7 @@ export const addShow = async (req, res) => {
                 poster_path: movieApiData.poster_path,
                 backdrop_path: movieApiData.backdrop_path,
                 genres: movieApiData.genres,
-                casts: movieCreditsData.casts,
+                casts: movieCreditsData.cast,
                 release_date: movieApiData.release_date,
                 original_language: movieApiData.original_language,
                 tagline: movieApiData.tagline || "",

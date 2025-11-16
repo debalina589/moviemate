@@ -20,3 +20,10 @@ body{
 .no-scrollbar{
   scrollbar-width: none;
 }
+
+/* Hide the default datetime picker icon */
+input[type="datetime-local"]::-webkit-calendar-picker-indicator {
+  border-radius: 20%;
+  background-color: #fff;
+  cursor: pointer;
+}
