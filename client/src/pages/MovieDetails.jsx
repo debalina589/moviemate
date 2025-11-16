@@ -3,11 +3,11 @@ import { useNavigate, useParams } from "react-router-dom";
 import { dummyDateTimeData, dummyShowsData } from "../assets/assets";
 import BlurCircle from "../components/BlurCircle";
 import { Heart, PlayCircleIcon, StarIcon } from "lucide-react";
-import timeFormat from "../library/timeFormat";
-import DateSelect from "../components/DateSelect";
-import MovieCard from "../components/MovieCard";
-import Loading from "../components/Loading";
-import { useAppContext } from "../context/AppContext";
+import timeFormat from "../library/timeFormat.js";
+import DateSelect from "../components/DateSelect.jsx";
+import MovieCard from "../components/MovieCard.jsx";
+import Loading from "../components/Loading.jsx";
+import { useAppContext } from "../context/AppContext.jsx";
 import toast from "react-hot-toast";
 
 const MovieDetails = () => {
@@ -84,7 +84,7 @@ const MovieDetails = () => {
               Watch Trailer
             </button>
             <a
-              href="#dataSelect"
+              href= '#dateSelect'
               className="px-10 py-3 text-sm bg-blue-500 hover:bg-blue-400 transition rounded-md font-medium cursor-pointer active:scale-95 gap-6"
             >
               {" "}
