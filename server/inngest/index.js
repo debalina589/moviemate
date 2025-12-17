@@ -15,11 +15,11 @@ const syncUserCreation = inngest.createFunction(
         event: 'clerk/user.created'
     },
     async ({ event }) => {
-        const {id, first_name, last_name, email_addresses, image_url} = event.data
+        const {id, first_name, last_name, email_addresses, image_url} = event.data;
         const userData ={
             _id: id,
             email: email_addresses[0].email_address,
-            name: first_name + ' ' + last_name,
+            name: `${first_name} ${last_name}`,
             image: image_url
         }
         await User.create(userData)
@@ -40,7 +40,7 @@ const syncUserDeletion = inngest.createFunction(
         await User.findByIdAndDelete(id)
     }
 
-)
+);
 // Inngest function to update user data in a database
 const syncUserUpdation = inngest.createFunction(
     {
@@ -50,7 +50,7 @@ const syncUserUpdation = inngest.createFunction(
         event: 'clerk/user.updated'
     },
     async ({ event }) => {
-        const {id, first_name, last_name, email_addresses, image_url} = event.data
+        const {id, first_name, last_name, email_addresses, image_url} = event.data;
        const userData ={
             _id: id,
             email: email_addresses[0].email_address,
@@ -65,24 +65,26 @@ const releaseSeatsAndDeleteBooking = inngest.createFunction(
     {id: 'release-seats-delete-booking'},
     {event: "app/checkpayment"},
     async ({ event, step })=>{
-        const tenMinutesLater = new DataTransfer(Date.now() + 10 * 60 * 1000);
+        const tenMinutesLater = new Date(Date.now() + 10 * 60 * 1000);
         await step.sleepUntil('wait-for-10-minutes', tenMinutesLater);
         await step.run('check-payment-status', async ()=>{
             const bookingId = event.data.bookingId;
             const  booking = await Booking.findById(bookingId)
-
-            if(!booking.isPaid){
+            if(!booking) return;
+            if(booking.isPaid) return;
                 const show = await Show.findById(booking.show);
-                booking.bookedSeats.forEach(()=>{
-                    delete show.occupiedSeats[seat]
+                if(!show) return;
+
+                booking.bookedSeats.forEach((seat)=>{
+                    delete show.occupiedSeats[seat];
                 });
-                show.markModified('occupiedSeats')
-                await show.save()
-                await Booking.findByIdAndDelete(booking._id)
-            }
-        })
+                show.markModified('occupiedSeats');
+                await show.save();
+                await Booking.findByIdAndDelete(booking._id);
+            
+        });
     }
-)
+);
 
 
 

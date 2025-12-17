@@ -65,6 +65,8 @@ export const createBooking = async (req, res) => {
         });
         showData.markModified('occupiedSeats');
         await showData.save();
+
+        
         //stripe gateway intialization
         const stripeInstance = new stripe(process.env.STRIPE_SECRET_KEY);
 
@@ -75,13 +77,13 @@ export const createBooking = async (req, res) => {
                 product_data: {
                     name: showData.movie.title
                 },
-                unit_amount: Math.round(booking.amount) 
+                unit_amount: Math.round(booking.amount * 100) 
             },
             quantity: 1
-        }]
+        }];
 
         const session = await stripeInstance.checkout.sessions.create({
-            success_url: `${origin}//my-bookings`,
+            success_url: `${origin}/my-bookings`,
             cancel_url: `${origin}/seat-layout`,
             line_items: line_items,
             mode: 'payment',
