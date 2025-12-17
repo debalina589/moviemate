@@ -1,10 +1,6 @@
-import React, { use, useEffect, useState } from "react";
+import React, {  useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
-import {
-  assets,
-  dummyDateTimeData,
-  dummyShowsData,
-} from "../assets/assets";
+import { assets} from "../assets/assets";
 import Loading from "../components/Loading";
 import { ArrowRightIcon, ClockIcon } from "lucide-react";
 import isoTimeFormat from "../library/isoTimeFormat";
@@ -25,8 +21,9 @@ const SeatLayout = () => {
   const [selectedSeats, setSelectedSeats] = useState([]);
   const [selectedTime, setSelectedTime] = useState(null);
   const [show, setShow] = useState(null);
-  const navigate = useNavigate(null);
+  const navigate = useNavigate();
   const [occupiedSeats, setOccupiedSeats] = useState([]);
+  const [isLoading, setIsLoading] = useState(true);
 
   const { axios, getToken, user } = useAppContext();
 
@@ -102,10 +99,11 @@ const SeatLayout = () => {
         return toast.error("Please select time and seats to proceed");
       }
       const { data } = await axios.post(
-        `/api/booking/create`,
+        "/api/booking/create", // chatgpt
         {
           showId: selectedTime.showId,
           selectedSeats,
+          origin: window.location.origin
         },
         { headers: { Authorization: `Bearer ${await getToken()} ` } }
       );

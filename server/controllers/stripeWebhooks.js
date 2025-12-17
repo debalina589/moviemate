@@ -1,7 +1,8 @@
 import { request, response } from "express";
-import stripe from "stripe";
+import stripe, { Stripe } from "stripe";
 import Booking from '../models/Booking.js'
 
+//const stripe = new Stripe(process.env.STRIPE_SECRET_KEY);
 export const stripeWebhooks = async (request, response) =>{
     const stripeInstance = new stripe(process.env.STRIPE_SECRET_KEY);
     const sig = request.headers["stripe-signature"];
@@ -9,8 +10,9 @@ export const stripeWebhooks = async (request, response) =>{
     let event;
 
     try {
-        event = stripeInstance.webhooks.constructEvent(request.body, sig, process.env.STRIPE_WEBHOOK_SECRET)
+        event = stripeInstance.webhooks.constructEvent(request.body, sig, process.env.STRIPE_WEBHOOK_SECRET);
     } catch (error) {
+        //console.error("Webhook signature verification failed.", error.message);
         return response.status(400).send(`Webhook Error: ${error.message}`);
     }
 
@@ -28,12 +30,12 @@ export const stripeWebhooks = async (request, response) =>{
                 await Booking.findByIdAndUpdate( bookingId, {
                     isPaid: true,
                     paymentLink: ""
-                })
-
+                });
+                console.log("Booking marked as paid:", bookingId);
                 break;
             }
             default:
-                console.log('Unhandled event type:', event.type);      
+                console.log(`Unhandled event type ${event.type}`);      
         }
         response.json({received: true})
     } catch (error) {
@@ -42,4 +44,4 @@ export const stripeWebhooks = async (request, response) =>{
         
     }
 
-}
+};

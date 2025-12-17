@@ -1,4 +1,5 @@
 //import express from "express";
+import { inngest } from "../inngest/index.js";
 import Booking from "../models/Booking.js";
 import Show from "../models/Show.js";
 import stripe from 'stripe';
@@ -29,7 +30,16 @@ export const createBooking = async (req, res) => {
              return res.status(401).json({ success: false, message: 'Unauthorized' });
 
         const {showId, selectedSeats} = req.body;
-        //const {origin} = req.headers;
+        const origin = req.body.origin || req.headers.origin;
+
+        if (!origin){
+            return res.json({ success: false, message: "Origin not found"});
+        }
+
+        // chatgpt recomends
+        //success_url: `${origin}/my-bookings`;
+        //cancel_url: `${origin}/seat-layout`;
+
 
         // Check if the seat is available for the selected show
         const isAvailable = await checkSeatsAvailability(showId, selectedSeats);
@@ -45,7 +55,7 @@ export const createBooking = async (req, res) => {
         const booking = await Booking.create({
             user: userId,
             show: showId,
-            amount: (showData.showPrice || 0) * (selectedSeats ? selectedSeats.length : 0),
+            amount: (showData.showPrice || 0) * ( selectedSeats.length),
             bookedSeats: selectedSeats
         });
         // mark seats as occupied
@@ -56,23 +66,23 @@ export const createBooking = async (req, res) => {
         showData.markModified('occupiedSeats');
         await showData.save();
         //stripe gateway intialization
-        const stripeInstance = new stripe(process.env.STRIPE_SECRET_KEY)
+        const stripeInstance = new stripe(process.env.STRIPE_SECRET_KEY);
 
         // creating line items to for stripe
         const line_items = [{
             price_data: {
-                currency: 'usd',
+                currency: 'inr',
                 product_data: {
                     name: showData.movie.title
                 },
-                unit_amount: Math.floor(booking.amount) * 100
+                unit_amount: Math.round(booking.amount) 
             },
             quantity: 1
         }]
 
         const session = await stripeInstance.checkout.sessions.create({
-            success_url: `${origin}/loading/my-bookings`,
-            cancel_url: `${origin}/my-bookings`,
+            success_url: `${origin}//my-bookings`,
+            cancel_url: `${origin}/seat-layout`,
             line_items: line_items,
             mode: 'payment',
             metadata: {
@@ -83,12 +93,20 @@ export const createBooking = async (req, res) => {
         booking.paymentLink = session.url
         await booking.save()
 
-        res.json({success: true, url: session.url})
+        // run inngest schedular function
+        await inngest.send({
+            name: "app/checkpayment",
+            data: {
+               bookingId: booking._id.toString()
+            }
+        })
 
-        return res.json({success: true, message: "Booking successful", booking});
+        return res.json({success: true, url: session.url})
+
+        //return res.json({success: true, message: "Booking successful", booking});
     } catch(error) {
         console.error("Error creating booking:", error.message);
-        res.json({success: false, message: error.message});
+       return res.json({success: false, message: error.message});
     }
     };
 export const getOccupiedSeats = async (req, res) => {
