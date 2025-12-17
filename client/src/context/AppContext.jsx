@@ -11,6 +11,7 @@ export const AppContext = createContext()
 export const AppProvider = ({ children }) => {
     const [isAdmin, setIsAdmin] = useState(false)
     const [shows, setShows] = useState([])
+    const [loading, setLoading] = useState(false)
     const [favoriteMovies, setFavoriteMovies] = useState([])
     
     const image_base_url = import.meta.env.VITE_TMDB_IMAGE_BASE_URL;
@@ -33,6 +34,7 @@ export const AppProvider = ({ children }) => {
     }
     const fetchShows = async () =>{
         try {
+            setLoading(true);
             const { data }= await axios.get('/api/show/all')
             if (data.success) {
                 setShows(data.shows)
@@ -42,6 +44,8 @@ export const AppProvider = ({ children }) => {
         } catch (error) {
             console.error(error);
             
+        } finally {
+            setLoading(false);
         }
     }
     const fetchFavoriteMovies = async () => {
@@ -73,7 +77,7 @@ export const AppProvider = ({ children }) => {
     const value = {
         axios,
         fetchIsAdmin,
-        user, getToken, navigate, isAdmin, shows, favoriteMovies, fetchFavoriteMovies, image_base_url
+        user, getToken, navigate, isAdmin, shows, favoriteMovies, fetchFavoriteMovies, image_base_url, loading
     }
     return (
         <AppContext.Provider value={value}>
